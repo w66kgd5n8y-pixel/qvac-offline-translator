@@ -1,1 +1,37 @@
+import { loadModel, translate, unloadModel } from '@qvac/sdk';
+
+async function runTranslator() {
+  console.log("=== QVAC Offline Translator ===");
+  const sourceText = "Hello! Running artificial intelligence locally on your device protects your privacy.";
+  console.log(`Original Text (EN): "${sourceText}"\n`);
+
+  try {
+    console.log("Loading translation model on-device...");
+    const modelId = await loadModel({
+      modelSrc: "BERGAMOT_EN_FR",
+      onProgress: (p) => {
+        const mb = (n) => (n / 1e6).toFixed(1);
+        process.stdout.write(`Downloading model: ${p.percentage.toFixed(0)}% (${mb(p.downloaded)}/${mb(p.total)} MB)\r`);
+      }
+    });
+
+    console.log("\nTranslating text offline...");
+    const result = await translate({
+      modelId,
+      text: sourceText
+    });
+
+    console.log("\n================ RESULT ================");
+    console.log(`Translated Text (FR): ${result.text}`);
+    console.log("========================================\n");
+
+    await unloadModel({ modelId });
+    console.log("Model unloaded successfully.");
+
+  } catch (error) {
+    console.error("Translation Error:", error);
+  }
+}
+
+runTranslator();
 
