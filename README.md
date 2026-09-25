@@ -11,8 +11,6 @@ An open-source, local-first text translation application powered by Tether's `@q
 
 ## Setup & Installation
 
-npm install
-
 1. Clone the repository:
    ```bash
    git clone <YOUR-GITHUB-REPO-URL>
